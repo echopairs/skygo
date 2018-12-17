@@ -1,0 +1,2 @@
+# go
+all golang project
