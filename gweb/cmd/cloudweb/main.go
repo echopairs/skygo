@@ -1,9 +1,13 @@
 package main
 
 import (
-	""
+	"github.com/echopairs/skygo/version"
+	"github.com/echopairs/skygo/gweb/web"
 )
 
 func main() {
-	//web.Helloworld()
+	version.Show()
+	web.Helloworld()
+	//cfg := &web.Config{}
+	//web.StartServer(cfg)
 }

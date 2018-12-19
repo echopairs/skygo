@@ -1,7 +1,7 @@
 package web
 
 import (
-
+	"fmt"
 )
 
 type Config struct {
@@ -12,5 +12,5 @@ func StartServer(cfg *Config) (err error) {
 }
 
 func Helloworld() {
-
+	fmt.Printf("hello world\n")
 }
