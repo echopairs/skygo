@@ -42,8 +42,8 @@ var (
 )
 
 func Show() {
-	fmt.Println(VERSION)
-	fmt.Println(BUILDTIME)
-	fmt.Println(GITBRANCH)
-	fmt.Println(GITCOMMIT)
+	fmt.Printf("VERSION: %s\n", VERSION)
+	fmt.Printf("BUILDTIME: %s\n", BUILDTIME)
+	fmt.Printf("GITBRANCH: %s\n", GITBRANCH)
+	fmt.Printf("GITCOMMIT: %s\n", GITCOMMIT)
 }
