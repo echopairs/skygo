@@ -10,11 +10,11 @@ import (
 )
 
 type ManagerConfig struct {
-	CookieName     string
-	GcLifeTime     int64
-	MaxLifeTime    int64
-	DriverName     string
-	CookieLifeTime int
+	CookieName     string	`yaml:"cookie_name"`
+	GcLifeTime     int64	`yaml:"gclife_time"`
+	MaxLifeTime    int64	`yaml:"maxlife_time"`
+	DriverName     string	`yaml:"driver_name"`
+	CookieLifeTime int		`yaml:"cookielife_time"`
 }
 
 type Manager struct {

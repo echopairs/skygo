@@ -33,7 +33,7 @@ import "fmt"
 // go build -ldflags "$LDFLAGS" xxx
 
 var (
-	VERSION = "unknown"
+	VERSION   = "unknown"
 	BUILDTIME = "unknown"
 	GITBRANCH = "unknown"
 	GITCOMMIT = "unknown"

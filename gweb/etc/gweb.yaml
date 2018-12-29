@@ -1,0 +1,23 @@
+server_addr: ":9090"
+sql_address:
+    driver_name: "mysql"
+    address: "127.0.0.1:3306"
+    max_idle_conns: 10
+    max_open_conns: 5
+    user_name: "root"
+    password: "admin"
+    db_name: "pairs"
+    dial_timeout: 1
+http_config:
+  cookie_name: gweb
+  gclife_time: 5
+  maxlife_time: 900
+  driver_name: memory
+  cookielife_time: 900
+
+db:
+  redis:
+    address: 127.0.0.1
+    password: 123456
+    max_active: 10
+    idle_timeout: 5

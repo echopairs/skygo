@@ -1,6 +1,10 @@
 module github.com/echopairs/skygo
 
 require (
+	github.com/go-sql-driver/mysql v1.4.1
+	github.com/jmoiron/sqlx v1.2.0
+	github.com/julienschmidt/httprouter v1.2.0
+	github.com/satori/go.uuid v1.2.0
 	golang.org/x/crypto v0.0.0-20181127143415-eb0de9b17e85
 	golang.org/x/net v0.0.0-20181114220301-adae6a3d119a // indirect
 	gopkg.in/yaml.v2 v2.2.1
