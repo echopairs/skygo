@@ -1,5 +1,11 @@
 package model
 
+import (
+	"crypto/md5"
+	"fmt"
+	"github.com/satori/go.uuid"
+)
+
 // user_id -> role_id -> (access ids) -> (access names)
 
 type User struct {
@@ -8,6 +14,8 @@ type User struct {
 	Password string   `json:"-" db:"password"`
 	Salt     string   `json:"-" db:"salt"`
 	Roles    []string `db:"-"`
+	Email 	 string	  `db:"-"`
+	IsAdmin  bool 	  `db:"-"`
 }
 
 type Role struct {
@@ -30,4 +38,14 @@ type RoleAccess struct {
 	ID       int `db:"id"`
 	RoleID   int `db:"role_id"`
 	AccessID int `db:"access_id"`
+}
+
+
+func (user *User) VerifyPassword(password string) bool {
+	p := fmt.Sprintf("%x", md5.Sum([]byte(password + user.Salt)))
+	return p == user.Password
+}
+
+func RandomString() string {
+	return fmt.Sprintf("%x", md5.Sum(uuid.NewV4().Bytes()))
 }

@@ -9,7 +9,7 @@ sql_address:
     db_name: "pairs"
     dial_timeout: 1
 http_config:
-  cookie_name: gweb
+  cookie_name: gwebId
   gclife_time: 5
   maxlife_time: 900
   driver_name: memory

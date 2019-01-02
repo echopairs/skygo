@@ -1,7 +1,7 @@
 package router
 
 import (
-	"github.com/echopairs/skygo/gweb/web/commom"
+	"github.com/echopairs/skygo/gweb/web/common"
 	"github.com/julienschmidt/httprouter"
 	_ "github.com/julienschmidt/httprouter"
 	"net/http"
@@ -89,9 +89,9 @@ func GetDefaultRouter() *Router {
 // Handler for get all route
 func RouteIndex(w http.ResponseWriter, r *http.Request) {
 	route := defaultRouter.GetAllRoutes()
-	res := &commom.ResBody{
+	res := &common.ResBody{
 		Err:0,
 		Data:route,
 	}
-	commom.WriteJson(w, res, http.StatusOK)
+	common.WriteJson(w, res, http.StatusOK)
 }

@@ -2,7 +2,7 @@ package book
 
 import (
 	"github.com/echopairs/skygo/gweb/model"
-	"github.com/echopairs/skygo/gweb/web/commom"
+	"github.com/echopairs/skygo/gweb/web/common"
 	"github.com/echopairs/skygo/gweb/web/router"
 	"github.com/julienschmidt/httprouter"
 
@@ -29,17 +29,17 @@ func init() {
 // POST /books
 func bookCreate(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	book := &model.Book{}
-	err := commom.PopulateModelFromHandler(r, book)
+	err := common.PopulateModelFromHandler(r, book)
 	if err != nil {
 		fmt.Printf("bookCreate PopulateModelFromHandler failed %s", err.Error())
-		commom.WriteError(w, commom.ERR_INVALID_REQUEST_BODY, http.StatusBadRequest)
+		common.WriteError(w, common.ERR_INVALID_REQUEST_BODY, http.StatusBadRequest)
 		return
 	}
 	mtx.Lock()
 	defer mtx.Lock()
 	if _, ok := bookstore[book.ISBN]; ok {
 		fmt.Printf("bookCreate failed, book %s already exist", book.ISBN)
-		commom.WriteError(w, commom.ERR_BOOK_ALREADY_EXIST, http.StatusBadRequest)
+		common.WriteError(w, common.ERR_BOOK_ALREADY_EXIST, http.StatusBadRequest)
 		return
 	}
 }
@@ -55,11 +55,11 @@ func bookIndex(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		books[i] = v
 		i++
 	}
-	res := &commom.ResBody{
-		Err:commom.OK,
+	res := &common.ResBody{
+		Err:common.OK,
 		Data:books,
 	}
-	commom.WriteJson(w, res, http.StatusOK)
+	common.WriteJson(w, res, http.StatusOK)
 }
 
 // Handler for the books Show action
@@ -72,11 +72,11 @@ func bookShow(w http.ResponseWriter, r *http.Request, params httprouter.Params) 
 	if !ok {
 		return
 	}
-	res := &commom.ResBody{
+	res := &common.ResBody{
 		Err:0,
 		Data:book,
 	}
-	commom.WriteJson(w, res, http.StatusOK)
+	common.WriteJson(w, res, http.StatusOK)
 }
 
 // Handler for delete book
@@ -90,32 +90,32 @@ func bookDelete(w http.ResponseWriter, r *http.Request, params httprouter.Params
 		return
 	}
 	delete(bookstore, isbn)
-	commom.WriteOk(w)
+	common.WriteOk(w)
 }
 
 // Handler for update book
 // POST /books/update
 func bookUpdate(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	book := &model.Book{}
-	err := commom.PopulateModelFromHandler(r, book)
+	err := common.PopulateModelFromHandler(r, book)
 	if err != nil {
-		commom.WriteError(w, commom.ERR_INVALID_REQUEST_BODY, http.StatusBadRequest)
+		common.WriteError(w, common.ERR_INVALID_REQUEST_BODY, http.StatusBadRequest)
 	}
 	mtx.Lock()
 	defer mtx.Unlock()
 	bookstore[book.ISBN] = book
-	res := &commom.ResBody{
+	res := &common.ResBody{
 		Err:0,
 		Data: bookstore[book.ISBN],
 	}
-	commom.WriteJson(w, res, http.StatusOK)
+	common.WriteJson(w, res, http.StatusOK)
 }
 
 func isExist(isbn string, w http.ResponseWriter) (ok bool, book *model.Book) {
 	book, ok = bookstore[isbn]
 	if !ok {
 		fmt.Printf("book %s not exist", isbn)
-		commom.WriteError(w, commom.ERR_BOOK_NOT_EXIST, http.StatusNotFound)
+		common.WriteError(w, common.ERR_BOOK_NOT_EXIST, http.StatusNotFound)
 		return
 	}
 	return
