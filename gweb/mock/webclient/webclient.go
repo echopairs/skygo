@@ -25,6 +25,7 @@ func main() {
 	}
 	//var body interface{}
 	data, err := ioutil.ReadAll(res.Body)
+	res.Body.Close()
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -35,15 +36,29 @@ func main() {
 	cooks := res.Cookies()
 	sname := cooks[0].Name
 	svalue := cooks[0].Value
-	fmt.Printf("name svalue is %s %s", sname, svalue)
-	//fmt.Println(res)
+
+	fmt.Printf("for test getAllUsers\n")
 	res, err = httpclient.WithCookie(
 		&http.Cookie{
-			Name:  sname,
+			Name: sname,
 			Value: svalue,
-		}).PostJson("http://127.0.0.1:9090/logout", loginString)
+		}).Get("http://127.0.0.1:9090/users")
 
+	data, err = ioutil.ReadAll(res.Body)
 	if err != nil {
 		fmt.Println(err)
+		return
 	}
+	fmt.Printf("/users response is %s\n", string(data))
+
+	////fmt.Println(res)
+	//res, err = httpclient.WithCookie(
+	//	&http.Cookie{
+	//		Name:  sname,
+	//		Value: svalue,
+	//	}).PostJson("http://127.0.0.1:9090/logout", loginString)
+	//
+	//if err != nil {
+	//	fmt.Println(err)
+	//}
 }

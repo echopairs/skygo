@@ -12,7 +12,8 @@ const (
 	ERR_EXEC_QUERY_SQL_ERROR = 6
 	ERR_CREATE_SESSION_ERROR = 7
 	ERR_SET_USER_TO_SESSION_ERROR = 8
-
+	ERR_USER_NOT_LOGIN = 9
+	ERR_AUTH_UNAUTHORIZED = 10
 
 	// 100-199 Books
 	ERR_BOOK_CREATE_FAILED = 101
@@ -30,6 +31,8 @@ var errMap = map[int]string{
 	ERR_EXEC_QUERY_SQL_ERROR: "Exec sql error",
 	ERR_CREATE_SESSION_ERROR: "Create session failed ",
 	ERR_SET_USER_TO_SESSION_ERROR: "Set user to session failed ",
+	ERR_USER_NOT_LOGIN:        "User not login",
+	ERR_AUTH_UNAUTHORIZED: 		"Auth unauthorized",
 
 	ERR_BOOK_CREATE_FAILED: "Book create failed",
 	ERR_BOOK_QUERY_FAILED:  "Book query failed",

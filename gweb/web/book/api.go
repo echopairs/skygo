@@ -5,11 +5,10 @@ import (
 	"github.com/echopairs/skygo/gweb/web/common"
 	"github.com/echopairs/skygo/gweb/web/router"
 	"github.com/julienschmidt/httprouter"
+	"log"
 
-	"fmt"
 	"net/http"
 	"sync"
-
 )
 
 var (
@@ -31,14 +30,14 @@ func bookCreate(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	book := &model.Book{}
 	err := common.PopulateModelFromHandler(r, book)
 	if err != nil {
-		fmt.Printf("bookCreate PopulateModelFromHandler failed %s", err.Error())
+		log.Printf("bookCreate PopulateModelFromHandler failed %s", err.Error())
 		common.WriteError(w, common.ERR_INVALID_REQUEST_BODY, http.StatusBadRequest)
 		return
 	}
 	mtx.Lock()
 	defer mtx.Lock()
 	if _, ok := bookstore[book.ISBN]; ok {
-		fmt.Printf("bookCreate failed, book %s already exist", book.ISBN)
+		log.Printf("bookCreate failed, book %s already exist", book.ISBN)
 		common.WriteError(w, common.ERR_BOOK_ALREADY_EXIST, http.StatusBadRequest)
 		return
 	}
@@ -114,7 +113,7 @@ func bookUpdate(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 func isExist(isbn string, w http.ResponseWriter) (ok bool, book *model.Book) {
 	book, ok = bookstore[isbn]
 	if !ok {
-		fmt.Printf("book %s not exist", isbn)
+		log.Printf("book %s not exist", isbn)
 		common.WriteError(w, common.ERR_BOOK_NOT_EXIST, http.StatusNotFound)
 		return
 	}

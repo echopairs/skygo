@@ -2,6 +2,7 @@ package session
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"net/url"
 	"time"
@@ -45,11 +46,11 @@ func (manager *Manager) SessionCreate(w http.ResponseWriter, r *http.Request) (s
 	// create
 	session, err = manager.SessionDriver.SessionCreate(sid)
 	if err != nil {
-		fmt.Printf("create session failed because of %s ", err.Error())
+		log.Printf("create session failed because of %s ", err.Error())
 		return
 	}
 
-	//fmt.Printf("create session sid is %s ", sid)
+	//log.Printf("create session sid is %s ", sid)
 
 	cookie := &http.Cookie{
 		Name:     manager.CookieName,

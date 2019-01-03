@@ -1,21 +1,20 @@
 package auth
 
 import (
-
 	"database/sql"
-	"fmt"
 	"log"
 	"net/http"
 
 	"github.com/echopairs/skygo/gweb/model"
 	"github.com/echopairs/skygo/gweb/web/common"
 	"github.com/echopairs/skygo/gweb/web/router"
-
+	"github.com/julienschmidt/httprouter"
 )
 
 func init() {
 	router.RegisterHttpHandleFunc("POST", "/login", "login", login)
 	router.RegisterHttpHandleFunc("POST", "/logout", "logout", logout)
+	router.RegisterHttpHandleFunc("GET", "/users", "getAllUsers", CheckPrivilegesWithHttpHandle(getAllUsers, "getAllUsers"))
 }
 
 func login(w http.ResponseWriter, r *http.Request) {
@@ -55,7 +54,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 		resBody.Err = common.ERR_EXEC_QUERY_SQL_ERROR
 		resBody.Msg = common.GetError(common.ERR_EXEC_QUERY_SQL_ERROR) + err.Error()
 		common.WriteJson(w, resBody, http.StatusInternalServerError)
-		fmt.Printf("error %s", err.Error())
+		log.Printf("error %s", err.Error())
 		return
 	}
 	if !user.VerifyPassword(password) {
@@ -73,28 +72,28 @@ func login(w http.ResponseWriter, r *http.Request) {
 			resBody.Err = common.ERR_EXEC_QUERY_SQL_ERROR
 			resBody.Msg = "get access ids failed"
 			common.WriteJson(w, resBody, http.StatusInternalServerError)
-			fmt.Println(err)
+			log.Println(err)
 			return
 		}
-		fmt.Printf("get access ids failed %s\n", err.Error())
+		log.Printf("get access ids failed %s\n", err.Error())
 	}
 
 	var roles []string
 	tx, err := authDb.Beginx()
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		return
 	}
 	st, err := tx.Preparex("select name from access where id = ?")
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		return
 	}
 	var role string
 	for _, id := range accessId {
 		if err = st.Get(&role, id); err != nil {
 			// todo
-			fmt.Println(err)
+			log.Println(err)
 			return
 		}
 		roles = append(roles, role)
@@ -118,16 +117,57 @@ func login(w http.ResponseWriter, r *http.Request) {
 		resBody.Err = common.ERR_SET_USER_TO_SESSION_ERROR
 		resBody.Msg = common.GetError(common.ERR_SET_USER_TO_SESSION_ERROR) + err.Error()
 		common.WriteJson(w, resBody, http.StatusInternalServerError)
-		fmt.Println(err)
+		log.Println(err)
 		return
 	}
 	resBody.Data = user.Roles
 	common.WriteJson(w, resBody, http.StatusOK)
-	log.Fatal()
 }
 
 func logout(w http.ResponseWriter, r *http.Request) {
-	// todo
-	common.ParseForm(r)
+	log.Printf("logout")
+	sess.SessionDestroy(w, r)
 	common.WriteOk(w)
+}
+
+// GET /users
+func getAllUsers(w http.ResponseWriter, r *http.Request) {
+	var users [] *model.User
+	err := authDb.Select(&users, "select * from user")
+	if err != nil {
+		log.Printf("query sql err %s", err.Error())
+		common.WriteError(w, common.ERR_EXEC_QUERY_SQL_ERROR, http.StatusInternalServerError)
+		return
+	}
+	resBody := &common.ResBody{
+		Err: common.OK,
+		Data: users,
+	}
+	common.WriteJson(w, resBody, http.StatusOK)
+	return
+}
+
+// GET /users/:name
+func getUser(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+
+}
+
+// POST /users
+func createUser(w http.ResponseWriter, r *http.Request) {
+
+}
+
+// DELETE /users/:name
+func deleteUser(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+
+}
+
+// PUT /users/:name/password
+func updateUserPassword(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+
+}
+
+// PUT /users/:name/roles
+func updateUserRoles(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+
 }

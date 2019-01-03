@@ -1,7 +1,6 @@
 package web
 
 import (
-	"fmt"
 	"log"
 
 	"io/ioutil"
@@ -40,13 +39,13 @@ func NewConfig(filename string) (*Config, error) {
 func StartServer(cfg *Config) (err error, server *http.Server) {
 	db, err := zsql.Connect(cfg.SqlAddress)
 	if err != nil {
-		fmt.Printf("create db failed %s\n", err.Error())
+		log.Printf("create db failed %s\n", err.Error())
 		return
 	}
 
 	ss, err := auth.NewSessionStorage(cfg.HttpConfig)
 	if err != nil {
-		fmt.Printf("create session failed %s\n", err.Error())
+		log.Printf("create session failed %s\n", err.Error())
 		return
 	}
 	auth.Set(ss, db)
@@ -64,14 +63,10 @@ func StartServer(cfg *Config) (err error, server *http.Server) {
 		}
 	}()
 
-	fmt.Printf("StartServer ok\n")
+	log.Printf("StartServer ok\n")
 	return
 }
 
 func init() {
 	router.RegisterHttpHandleFunc("GET", "/routes", "routeIndex", router.RouteIndex)
-}
-
-func HelloWorld() {
-	fmt.Printf("hello world\n")
 }

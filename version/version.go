@@ -1,6 +1,8 @@
 package version
 
-import "fmt"
+import (
+	"log"
+)
 
 // 自动添加版本信息，需要在build的时候传ldflags进去，参考脚本如下
 //
@@ -42,8 +44,8 @@ var (
 )
 
 func Show() {
-	fmt.Printf("VERSION: %s\n", VERSION)
-	fmt.Printf("BUILDTIME: %s\n", BUILDTIME)
-	fmt.Printf("GITBRANCH: %s\n", GITBRANCH)
-	fmt.Printf("GITCOMMIT: %s\n", GITCOMMIT)
+	log.Printf("VERSION: %s\n", VERSION)
+	log.Printf("BUILDTIME: %s\n", BUILDTIME)
+	log.Printf("GITBRANCH: %s\n", GITBRANCH)
+	log.Printf("GITCOMMIT: %s\n", GITCOMMIT)
 }
