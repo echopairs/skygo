@@ -1,8 +1,8 @@
 package web
 
 import (
-	"log"
 
+	"log"
 	"io/ioutil"
 	"net/http"
 
@@ -12,12 +12,13 @@ import (
 	"gopkg.in/yaml.v2"
 
 	_ "github.com/echopairs/skygo/gweb/web/book"
+	"github.com/echopairs/skygo/gweb/web/ws"
 )
 
 type Config struct {
-	HttpConfig    *auth.HttpConfig	`yaml:"http_config"`
-	SqlAddress    *zsql.SqlAddress	`yaml:"sql_address"`
-	ServerAddress string 			`yaml:"server_addr"`
+	HttpConfig    *auth.HttpConfig `yaml:"http_config"`
+	SqlAddress    *zsql.SqlAddress `yaml:"sql_address"`
+	ServerAddress string           `yaml:"server_addr"`
 }
 
 func NewConfig(filename string) (*Config, error) {
@@ -52,8 +53,14 @@ func StartServer(cfg *Config) (err error, server *http.Server) {
 
 	route := router.GetDefaultRouter()
 	server = &http.Server{
-		Addr:cfg.ServerAddress,
-		Handler:route,
+		Addr:    cfg.ServerAddress,
+		Handler: route,
+	}
+
+	err = ws.Start()
+	if err != nil {
+		log.Printf("ws start error: %v", err)
+		return
 	}
 
 	go func() {

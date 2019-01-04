@@ -12,7 +12,6 @@ func checkFunc(f interface{}) {
 		fmt.Printf("please check f is not nil")
 	}
 
-
 	// 2. check in input params
 	ft := reflect.TypeOf(f)
 
@@ -27,7 +26,6 @@ func checkFunc(f interface{}) {
 	if !ft.In(2).Implements(reflect.TypeOf((*Interface)(nil)).Elem()) {
 		fmt.Printf("the 3th param should impl Interface\n")
 	}
-
 
 	// 3. check output params
 	if ft.NumOut() != 2 {

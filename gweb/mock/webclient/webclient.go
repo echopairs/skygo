@@ -40,7 +40,7 @@ func main() {
 	fmt.Printf("for test getAllUsers\n")
 	res, err = httpclient.WithCookie(
 		&http.Cookie{
-			Name: sname,
+			Name:  sname,
 			Value: svalue,
 		}).Get("http://127.0.0.1:9090/users")
 

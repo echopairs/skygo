@@ -132,7 +132,7 @@ func logout(w http.ResponseWriter, r *http.Request) {
 
 // GET /users
 func getAllUsers(w http.ResponseWriter, r *http.Request) {
-	var users [] *model.User
+	var users []*model.User
 	err := authDb.Select(&users, "select * from user")
 	if err != nil {
 		log.Printf("query sql err %s", err.Error())
@@ -140,7 +140,7 @@ func getAllUsers(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	resBody := &common.ResBody{
-		Err: common.OK,
+		Err:  common.OK,
 		Data: users,
 	}
 	common.WriteJson(w, resBody, http.StatusOK)

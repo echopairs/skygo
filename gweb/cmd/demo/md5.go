@@ -5,7 +5,6 @@ import (
 	"fmt"
 )
 
-
 func main() {
 	//pass := "admin"
 	//salt := fmt.Sprintf("%x", md5.Sum([]byte(uuid.NewV4().Bytes())))
@@ -17,7 +16,7 @@ func main() {
 	// verify
 	ts := "b0d2c14f091a9f895392bb67aca06ba6"
 	tp := "64ddd4e4850955cb4322dc06b316253e"
-	pa := fmt.Sprintf("%x", md5.Sum([]byte("admin" + ts)))
+	pa := fmt.Sprintf("%x", md5.Sum([]byte("admin"+ts)))
 	if pa == tp {
 		fmt.Printf("verify password\n")
 	} else {

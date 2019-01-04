@@ -55,8 +55,8 @@ func bookIndex(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		i++
 	}
 	res := &common.ResBody{
-		Err:common.OK,
-		Data:books,
+		Err:  common.OK,
+		Data: books,
 	}
 	common.WriteJson(w, res, http.StatusOK)
 }
@@ -72,8 +72,8 @@ func bookShow(w http.ResponseWriter, r *http.Request, params httprouter.Params) 
 		return
 	}
 	res := &common.ResBody{
-		Err:0,
-		Data:book,
+		Err:  0,
+		Data: book,
 	}
 	common.WriteJson(w, res, http.StatusOK)
 }
@@ -104,7 +104,7 @@ func bookUpdate(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	defer mtx.Unlock()
 	bookstore[book.ISBN] = book
 	res := &common.ResBody{
-		Err:0,
+		Err:  0,
 		Data: bookstore[book.ISBN],
 	}
 	common.WriteJson(w, res, http.StatusOK)

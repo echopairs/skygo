@@ -9,10 +9,9 @@ import (
 )
 
 type Route struct {
-	Name 	string
-	Method 	string
-	Path 	string
-
+	Name   string
+	Method string
+	Path   string
 }
 
 type Router struct {
@@ -22,7 +21,7 @@ type Router struct {
 }
 
 func NewRouter() *Router {
-	 hr := httprouter.New()
+	hr := httprouter.New()
 	router := &Router{
 		Router: hr,
 	}
@@ -90,8 +89,8 @@ func GetDefaultRouter() *Router {
 func RouteIndex(w http.ResponseWriter, r *http.Request) {
 	route := defaultRouter.GetAllRoutes()
 	res := &common.ResBody{
-		Err:0,
-		Data:route,
+		Err:  0,
+		Data: route,
 	}
 	common.WriteJson(w, res, http.StatusOK)
 }

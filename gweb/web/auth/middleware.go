@@ -12,9 +12,7 @@ func CheckPrivilegesWithHttpHandle(h http.HandlerFunc, funcname string) http.Han
 	return func(w http.ResponseWriter, r *http.Request) {
 		// 1. get user first
 		user := GetUser(r)
-		resBody := common.ResBody{
-
-		}
+		resBody := common.ResBody{}
 		if user == nil {
 			resBody.Err = common.ERR_USER_NOT_LOGIN
 			resBody.Msg = common.GetError(common.ERR_USER_NOT_LOGIN)

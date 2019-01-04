@@ -16,9 +16,9 @@ CREATE TABLE person (
 `
 
 type Person struct {
-	FirstName 	string `db:"first_name"`
-	LastName 	string `db:"last_name"`
-	Email 		string
+	FirstName string `db:"first_name"`
+	LastName  string `db:"last_name"`
+	Email     string
 }
 
 func main() {
@@ -65,9 +65,9 @@ func main() {
 
 	// 5. name 綁定插入 (map映射/結構體映射)
 	_, err = db.NamedExec(`Insert INTO person (first_name, last_name, email) VALUES (:first, :last, :email)`,
-		map[string]interface{} {
+		map[string]interface{}{
 			"first": "Bin",
-			"last": "Smuth",
+			"last":  "Smuth",
 			"email": "sss@qq.com",
 		})
 
