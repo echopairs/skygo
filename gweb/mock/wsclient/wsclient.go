@@ -30,7 +30,10 @@ func main() {
 	defer c.Close()
 
 	done := make(chan struct{})
-
+	c.SetPingHandler(func(data string) error{
+		log.Printf("recv ping message")
+		return nil
+	} )
 	// read
 	go func() {
 		defer close(done)

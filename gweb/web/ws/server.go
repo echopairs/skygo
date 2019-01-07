@@ -57,6 +57,10 @@ func (server *WebSocketServer) HandleWebsocket(w http.ResponseWriter, r *http.Re
 		conn:   conn,
 		send:   make(chan interface{}),
 	}
+	conn.SetCloseHandler(func(code int, text string) error {
+		log.Printf("code %d, text %s", code, text)
+		return nil
+	})
 	server.register <- client
 	go client.writePump(server.ctx)
 	go client.readPump(server.ctx)
