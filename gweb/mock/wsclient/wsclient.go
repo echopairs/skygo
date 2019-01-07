@@ -60,6 +60,10 @@ func main() {
 				log.Println("write: ", err)
 				return
 			}
+			err = c.WriteMessage(websocket.PingMessage, []byte{})
+			if err != nil {
+				log.Println("ping: ", err)
+			}
 		case <-interrupt:
 			log.Println("interrupt")
 
