@@ -64,44 +64,28 @@ func login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// 2. get roles
-	var accessId []int
-	sqlStr := "select access_id from role_access where role_id = (select role_id from user_role where user_id = ?)"
-	err = authDb.Select(&accessId, sqlStr, user.ID)
+	var access []model.Access
+
+	//sqlStr := "select access_id from role_access where role_id = (select role_id from user_role where user_id = ?)"
+	sqlStr := `select access.id, access.name from user_role as ur, role_access as ra, access where 
+				ur.user_id = ?
+				AND ur.role_id = ra.role_id
+				AND ra.access_id = access.id
+				`
+	err = authDb.Select(&access, sqlStr, user.ID)
 	if err != nil {
 		if err != sql.ErrNoRows {
 			resBody.Err = common.ERR_EXEC_QUERY_SQL_ERROR
-			resBody.Msg = "get access ids failed"
+			resBody.Msg = "get access  failed"
 			common.WriteJson(w, resBody, http.StatusInternalServerError)
 			log.Println(err)
 			return
 		}
-		log.Printf("get access ids failed %s\n", err.Error())
+		log.Printf("get access failed %s\n", err.Error())
 	}
 
-	var roles []string
-	tx, err := authDb.Beginx()
-	if err != nil {
-		log.Println(err)
-		return
-	}
-	st, err := tx.Preparex("select name from access where id = ?")
-	if err != nil {
-		log.Println(err)
-		return
-	}
-	var role string
-	for _, id := range accessId {
-		if err = st.Get(&role, id); err != nil {
-			// todo
-			log.Println(err)
-			return
-		}
-		roles = append(roles, role)
-	}
-	tx.Commit()
-
-	for _, role = range roles {
-		user.Roles = append(user.Roles, role)
+	for _, value := range access {
+		user.Roles = append(user.Roles, value.Name)
 	}
 
 	// 3. write to session
@@ -120,7 +104,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 		return
 	}
-	resBody.Data = user.Roles
+	resBody.Data = access
 	common.WriteJson(w, resBody, http.StatusOK)
 }
 

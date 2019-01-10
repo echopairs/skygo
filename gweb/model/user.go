@@ -14,7 +14,7 @@ type User struct {
 	UserName string   `db:"name"`
 	Password string   `json:"-" db:"password"`
 	Salt     string   `json:"-" db:"salt"`
-	Roles    []string `json:"-" db:"-"`
+	Roles    []string `db:"-"`
 	Email    string   `json:"email" db:"email"`
 	IsAdmin  bool     `json:"is_admin" db:"is_admin"`
 }
