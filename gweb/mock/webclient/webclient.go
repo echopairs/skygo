@@ -37,7 +37,7 @@ func main() {
 	sname := cooks[0].Name
 	svalue := cooks[0].Value
 
-	fmt.Printf("for test getAllUsers\n")
+	fmt.Printf("for test getAllUsers\n\n")
 	res, err = httpclient.WithCookie(
 		&http.Cookie{
 			Name:  sname,
@@ -49,7 +49,29 @@ func main() {
 		fmt.Println(err)
 		return
 	}
-	fmt.Printf("/users response is %s\n", string(data))
+	fmt.Printf("/users response is %s\n\n", string(data))
+
+	// for test get user
+	res, err = httpclient.WithCookie(
+		&http.Cookie{
+			Name: sname,
+			Value: svalue,
+		}).Get("http://127.0.0.1:9090/users/root")
+	data, err = ioutil.ReadAll(res.Body)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Printf("/users/root response is %s\n\n", string(data))
+
+	// for test get /roles
+	res, err = httpclient.WithCookie(
+		&http.Cookie{
+			Name: sname,
+			Value: svalue,
+		}).Get("http://127.0.0.1:9090/roles")
+	data, err = ioutil.ReadAll(res.Body)
+	fmt.Printf("/roles response %s \n\n", string(data))
 
 	////fmt.Println(res)
 	//res, err = httpclient.WithCookie(

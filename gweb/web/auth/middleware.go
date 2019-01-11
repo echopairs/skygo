@@ -19,7 +19,7 @@ func CheckPrivilegesWithHttpHandle(h http.HandlerFunc, funcname string) http.Han
 			common.WriteJson(w, resBody, http.StatusBadRequest)
 			return
 		}
-
+		// 2. check
 		ok, errCode := checkPrivileges(user.ID, funcname)
 		if !ok {
 			common.WriteError(w, errCode, http.StatusForbidden)
@@ -31,7 +31,26 @@ func CheckPrivilegesWithHttpHandle(h http.HandlerFunc, funcname string) http.Han
 }
 
 func CheckPrivilegesWithRouterHandle(h httprouter.Handle, funcname string) httprouter.Handle {
-	return nil
+	return func(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
+		// 1. get user first
+		user := GetUser(r)
+		resBody := common.ResBody{}
+		if user == nil {
+			resBody.Err = common.ERR_USER_NOT_LOGIN
+			resBody.Msg = common.GetError(common.ERR_USER_NOT_LOGIN)
+			common.WriteJson(w, resBody, http.StatusBadRequest)
+			return
+		}
+
+		// 2. check
+		ok, errCode := checkPrivileges(user.ID, funcname)
+		if !ok {
+			common.WriteError(w, errCode, http.StatusForbidden)
+			return
+		}
+		// 3. after privileges check
+		h(w, r, params)
+	}
 }
 
 func checkPrivileges(id int, funcname string) (bool, int) {
